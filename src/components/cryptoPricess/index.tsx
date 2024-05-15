@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { connectAndReconnect } from "@/services/webSocketService";
 
 const CryptoPrices = () => {
-  const [coinList, setCoinList] = useState({});
+  const [coinList, setCoinList] = useState<{ [key: string]: any }>({});
   useEffect(() => {
     const socketUrl = "wss://ws.coincap.io/prices?assets=ALL";
 
@@ -11,7 +11,7 @@ const CryptoPrices = () => {
     };
 
     const ws = connectAndReconnect(socketUrl, successCallback);
-    let list = {};
+    let list: { [key: string]: any } = {};
     ws.onmessage = (event) => {
       console.log("event", event); // Handle the received data (e.g., update state with prices)
       const data = JSON.parse(event.data);
@@ -31,10 +31,13 @@ const CryptoPrices = () => {
 
   return (
     <div>
-      <div>{Object.keys(coinList).length}</div>
+      {/* <div>
+        <span>count:</span>
+        <span> {Object.keys(coinList).length}</span>
+      </div> */}
 
       {Object.keys(coinList).map((item) => (
-        <div className="flex gap-4">
+        <div className="flex gap-4" key={item}>
           <span>{item}:</span>
           <span>{coinList[item]}</span>
         </div>
